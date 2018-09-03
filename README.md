@@ -1,19 +1,19 @@
 ## Getting Started
-For general information about SteemConnect V2 and setting up your app please see this post from @noisy: [How to configure SteemConnect v2 and use it with your application](https://busy.org/steemconnect/@noisy/how-to-configure-steemconnect-v2-and-use-it-with-your-application-how-it-works-and-how-it-is-different-from-v1)
+For general information about DPayId V2 and setting up your app please see this post from @jared: [How to configure DPayId v2 and use it with your application](https://dsite.io/dpayid/@jared/how-to-configure-dpayid-and-use-it-with-your-application-and-how-it-works)
 
-### Include the SC2 SDK in your HTML page
-You can download a minified version of sc2.js here: [https://steemit.github.io/example-steemconnect-angular/sc2.min.js](https://steemit.github.io/example-steemconnect-angular/sc2.min.js) and include it in your HTML page:
+### Include the DPID SDK in your HTML page
+You can download a minified version of dpid.js here: [https://dpays.github.io/example-dpayid-angular/dpid.min.js](https://dpays.github.io/example-dpayid-angular/dpid.min.js) and include it in your HTML page:
 ```
-<script src="/scripts/sc2.min.js"></script>
+<script src="/scripts/dpid.min.js"></script>
 ```
 
 ## SDK Methods
 ### Init SDK
 Call the Initialize() method when your app first loads to initialize the SDK:
 ```
-var sc2 = require('sc2-sdk');
+var dpid = require('@dpay/id');
 
-var api = sc2.Initialize({
+var api = dpid.Initialize({
   app: 'busy',
   callbackURL: 'http://localhost:8000/demo/',
   accessToken: 'access_token',
@@ -21,23 +21,23 @@ var api = sc2.Initialize({
 });
 ```
 Parameters:
-- __app__: This is the name of the app that was registered in the SteemConnect V2 dashboard
-- __callbackURL__: This is the URL that users will be redirected to after interacting with SC2. It must be listed in the "Redirect URI(s)" list in the app settings EXACTLY the same as it is specified here
-- __accessToken__: If you have an oauth2 access token for this user already you can specify it here, otherwise you can leave it and set it later using sc2.setAccessToken(accessToken).
-- __scope__: This is a list of operations the app will be able to access on the user's account. For a complete list of scopes see: [https://github.com/steemit/steemconnect/wiki/OAuth-2#scopes](https://github.com/steemit/steemconnect/wiki/OAuth-2#scopes)
+- __app__: This is the name of the app that was registered in the DPayId V2 dashboard
+- __callbackURL__: This is the URL that users will be redirected to after interacting with DPID. It must be listed in the "Redirect URI(s)" list in the app settings EXACTLY the same as it is specified here
+- __accessToken__: If you have an oauth2 access token for this user already you can specify it here, otherwise you can leave it and set it later using dpid.setAccessToken(accessToken).
+- __scope__: This is a list of operations the app will be able to access on the user's account. For a complete list of scopes see: [https://github.com/dpays/dpayid-sdk/wiki/OAuth-2#scopes](https://github.com/dpays/dpayid-sdk/wiki/OAuth-2#scopes)
 
 ### Get Login URL
-The following method returns a URL that you can redirect the user to so that they may log in to your app through SC2:
+The following method returns a URL that you can redirect the user to so that they may log in to your app through DPID:
 ```
 var link = api.getLoginURL(state);
 console.log(link)
-// => https://steemconnect.com/oauth2/authorize?client_id=[app]&redirect_uri=[callbackURL]&scope=vote,comment&state=[state]
+// => https://dpayid.io/oauth2/authorize?client_id=[app]&redirect_uri=[callbackURL]&scope=vote,comment&state=[state]
 ```
 Parameters:
 - __state__: Data that will be passed to the callbackURL for your app after the user has logged in.
 
-After logging in, SC2 will redirect the user to the "redirect_uri" specified in the login url above and add the following query string parameters for your app to use:
-- __access_token__: This is the oauth2 access token that is required to make any Steem API calls on behalf of the current user. Once you have this you need to tell the SC2 SDK to use it by either specifying it as a parameter to the init() method call or by calling sc2.setAccessToken([accessToken]).
+After logging in, DPID will redirect the user to the "redirect_uri" specified in the login url above and add the following query string parameters for your app to use:
+- __access_token__: This is the oauth2 access token that is required to make any dPay API calls on behalf of the current user. Once you have this you need to tell the DPID SDK to use it by either specifying it as a parameter to the init() method call or by calling dpid.setAccessToken([accessToken]).
 - __expires_in__: The number of seconds until the access token expires.
 - __username__: The username of the current user.
 
@@ -66,9 +66,9 @@ api.vote(voter, author, permlink, weight, function (err, res) {
 });
 ```
 Parameters:
-- __voter__: The Steem username of the current user.
-- __author__: The Steem username of the author of the post or comment.
-- __permlink__: The link to the post or comment on which to vote. This is the portion of the URL after the last "/". For example the "permlink" for this post: https://steemit.com/steem/@ned/announcing-smart-media-tokens-smts would be "announcing-smart-media-tokens-smts".
+- __voter__: The dPay username of the current user.
+- __author__: The dPay username of the author of the post or comment.
+- __permlink__: The link to the post or comment on which to vote. This is the portion of the URL after the last "/". For example the "permlink" for this post: https://dsite.io/dpay/@jared/announcing-smart-dapp-commodities would be "announcing-smart-dapp-commodities-sdcs".
 - __weight__: The weight of the vote. 10000 equale a 100% vote.
 - __callback__: A function that is called once the vote is submitted and included in a block. If successful the "res" variable will be a JSON object containing the details of the block and the vote operation.
 
@@ -85,16 +85,16 @@ The sign() method creates a URL to which your app can redirect the user to perfo
 ```
 var link = api.sign('transfer', {
   to: 'fabien',
-  amount: '1.000 STEEM',
+  amount: '1.000 BEX',
   memo: 'Hello World!',
 }, 'http://localhost:8000/demo/transfer-complete');
 
 console.log(link);
-// => https://steemconnect.com/sign/transfer?to=fabien&amount=1.000%20STEEM&memo=Hello%20World!&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fdemo%2Ftransfer-complete
+// => https://dpayid.io/sign/transfer?to=fabien&amount=1.000%20BEX&memo=Hello%20World!&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fdemo%2Ftransfer-complete
 ```
 
 ### Logout
-The revokeToken() method will log the current user out of your application by revoking the access token provided to your app for that user: 
+The revokeToken() method will log the current user out of your application by revoking the access token provided to your app for that user:
 ```
 api.revokeToken(function (err, res) {
   console.log(err, res)
@@ -131,7 +131,7 @@ api.ignore(follower, following, function (err, res) {
 
 ### Claim Reward Balance
 ```
-api.claimRewardBalance(account, rewardSteem, rewardSbd, rewardVests, function (err, res) {
+api.claimRewardBalance(account, rewardDpay, rewardBbd, rewardVests, function (err, res) {
   console.log(err, res)
 });
 ```

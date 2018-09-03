@@ -1,13 +1,13 @@
 /* eslint-env browser */
 
-const sc2 = require('./sc2');
+const dpid = require('./dpid');
 
 if (typeof window !== 'undefined') {
-  window.sc2 = sc2;
+  window.dpid = dpid;
 }
 
 if (typeof global !== 'undefined') {
-  global.sc2 = sc2;
+  global.dpid = dpid;
 }
 
-module.exports = sc2;
+module.exports = dpid;

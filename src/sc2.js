@@ -14,35 +14,35 @@ class SDKError extends Error {
   }
 }
 
-function SteemConnect() {
+function DPayId() {
   this.options = {
-    baseURL: 'https://steemconnect.com',
+    baseURL: 'https://dpayid.io',
     app: '',
     callbackURL: '',
     scope: [],
   };
 }
 
-SteemConnect.prototype.setBaseURL = function setBaseURL(baseURL) {
+DPayId.prototype.setBaseURL = function setBaseURL(baseURL) {
   this.options.baseURL = baseURL;
 };
-SteemConnect.prototype.setApp = function setApp(app) {
+DPayId.prototype.setApp = function setApp(app) {
   this.options.app = app;
 };
-SteemConnect.prototype.setCallbackURL = function setCallbackURL(callbackURL) {
+DPayId.prototype.setCallbackURL = function setCallbackURL(callbackURL) {
   this.options.callbackURL = callbackURL;
 };
-SteemConnect.prototype.setAccessToken = function setAccessToken(accessToken) {
+DPayId.prototype.setAccessToken = function setAccessToken(accessToken) {
   this.options.accessToken = accessToken;
 };
-SteemConnect.prototype.removeAccessToken = function removeAccessToken() {
+DPayId.prototype.removeAccessToken = function removeAccessToken() {
   this.options.accessToken = undefined;
 };
-SteemConnect.prototype.setScope = function setScope(scope) {
+DPayId.prototype.setScope = function setScope(scope) {
   this.options.scope = scope;
 };
 
-SteemConnect.prototype.getLoginURL = function getLoginURL(state) {
+DPayId.prototype.getLoginURL = function getLoginURL(state) {
   let loginURL = `${this.options.baseURL}/oauth2/authorize?client_id=${
     this.options.app
   }&redirect_uri=${encodeURIComponent(this.options.callbackURL)}`;
@@ -51,7 +51,7 @@ SteemConnect.prototype.getLoginURL = function getLoginURL(state) {
   return loginURL;
 };
 
-SteemConnect.prototype.send = function send(route, method, body, cb) {
+DPayId.prototype.send = function send(route, method, body, cb) {
   const url = `${this.options.baseURL}/api/${route}`;
   const promise = fetch(url, {
     method,
@@ -67,13 +67,13 @@ SteemConnect.prototype.send = function send(route, method, body, cb) {
       // If the status is something other than 200 we need
       // to reject the result since the request is not considered as a fail
       if (res.status !== 200) {
-        return json.then(result => Promise.reject(new SDKError('sc2-sdk error', result)));
+        return json.then(result => Promise.reject(new SDKError('dpid-sdk error', result)));
       }
       return json;
     })
     .then((res) => {
       if (res.error) {
-        return Promise.reject(new SDKError('sc2-sdk error', res));
+        return Promise.reject(new SDKError('dpid-sdk error', res));
       }
       return res;
     });
@@ -83,15 +83,15 @@ SteemConnect.prototype.send = function send(route, method, body, cb) {
   return promise.then(res => cb(null, res)).catch(err => cb(err, null));
 };
 
-SteemConnect.prototype.broadcast = function broadcast(operations, cb) {
+DPayId.prototype.broadcast = function broadcast(operations, cb) {
   return this.send('broadcast', 'POST', { operations }, cb);
 };
 
-SteemConnect.prototype.me = function me(cb) {
+DPayId.prototype.me = function me(cb) {
   return this.send('me', 'POST', {}, cb);
 };
 
-SteemConnect.prototype.vote = function vote(voter, author, permlink, weight, cb) {
+DPayId.prototype.vote = function vote(voter, author, permlink, weight, cb) {
   const params = {
     voter,
     author,
@@ -101,7 +101,7 @@ SteemConnect.prototype.vote = function vote(voter, author, permlink, weight, cb)
   return this.broadcast([['vote', params]], cb);
 };
 
-SteemConnect.prototype.comment = function comment(
+DPayId.prototype.comment = function comment(
   parentAuthor,
   parentPermlink,
   author,
@@ -123,7 +123,7 @@ SteemConnect.prototype.comment = function comment(
   return this.broadcast([['comment', params]], cb);
 };
 
-SteemConnect.prototype.reblog = function reblog(account, author, permlink, cb) {
+DPayId.prototype.reblog = function reblog(account, author, permlink, cb) {
   const params = {
     required_auths: [],
     required_posting_auths: [account],
@@ -140,7 +140,7 @@ SteemConnect.prototype.reblog = function reblog(account, author, permlink, cb) {
   return this.broadcast([['custom_json', params]], cb);
 };
 
-SteemConnect.prototype.follow = function follow(follower, following, cb) {
+DPayId.prototype.follow = function follow(follower, following, cb) {
   const params = {
     required_auths: [],
     required_posting_auths: [follower],
@@ -150,7 +150,7 @@ SteemConnect.prototype.follow = function follow(follower, following, cb) {
   return this.broadcast([['custom_json', params]], cb);
 };
 
-SteemConnect.prototype.unfollow = function unfollow(unfollower, unfollowing, cb) {
+DPayId.prototype.unfollow = function unfollow(unfollower, unfollowing, cb) {
   const params = {
     required_auths: [],
     required_posting_auths: [unfollower],
@@ -160,7 +160,7 @@ SteemConnect.prototype.unfollow = function unfollow(unfollower, unfollowing, cb)
   return this.broadcast([['custom_json', params]], cb);
 };
 
-SteemConnect.prototype.ignore = function ignore(follower, following, cb) {
+DPayId.prototype.ignore = function ignore(follower, following, cb) {
   const params = {
     required_auths: [],
     required_posting_auths: [follower],
@@ -170,35 +170,35 @@ SteemConnect.prototype.ignore = function ignore(follower, following, cb) {
   return this.broadcast([['custom_json', params]], cb);
 };
 
-SteemConnect.prototype.claimRewardBalance = function claimRewardBalance(
+DPayId.prototype.claimRewardBalance = function claimRewardBalance(
   account,
-  rewardSteem,
-  rewardSbd,
+  rewardDpay,
+  rewardBbd,
   rewardVests,
   cb
 ) {
   const params = {
     account,
-    reward_steem: rewardSteem,
-    reward_sbd: rewardSbd,
+    reward_dpay: rewardDpay,
+    reward_bbd: rewardBbd,
     reward_vests: rewardVests,
   };
   return this.broadcast([['claim_reward_balance', params]], cb);
 };
 
-SteemConnect.prototype.revokeToken = function revokeToken(cb) {
+DPayId.prototype.revokeToken = function revokeToken(cb) {
   return this.send('oauth2/token/revoke', 'POST', { token: this.options.accessToken }, cb).then(
     () => this.removeAccessToken()
   );
 };
 
-SteemConnect.prototype.updateUserMetadata = function updateUserMetadata(metadata = {}, cb) {
+DPayId.prototype.updateUserMetadata = function updateUserMetadata(metadata = {}, cb) {
   return this.send('me', 'PUT', { user_metadata: metadata }, cb);
 };
 
-SteemConnect.prototype.sign = function sign(name, params, redirectUri) {
+DPayId.prototype.sign = function sign(name, params, redirectUri) {
   if (typeof name !== 'string' || typeof params !== 'object') {
-    return new SDKError('sc2-sdk error', {
+    return new SDKError('dpid-sdk error', {
       error: 'invalid_request',
       error_description: 'Request has an invalid format',
     });
@@ -212,7 +212,7 @@ SteemConnect.prototype.sign = function sign(name, params, redirectUri) {
 };
 
 exports.Initialize = function Initialize(config) {
-  const instance = new SteemConnect();
+  const instance = new DPayId();
 
   if (!config) {
     throw new Error('You have to provide config');

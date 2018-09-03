@@ -1,8 +1,8 @@
 {
-  "name": "sc2-sdk",
-  "version": "1.0.2",
-  "description": "SteemConnect v2 SDK",
-  "main": "lib/sc2.js",
+  "name": "@dpay/id",
+  "version": "0.1.1",
+  "description": "dPayID SDK",
+  "main": "lib/dpid.js",
   "scripts": {
     "prepublish": "npm run build",
     "build": "cross-env NODE_ENV=production && gulp build-browser && gulp build-node",
@@ -11,21 +11,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adcpm/sc2-sdk.git"
+    "url": "git+https://github.com/dpays/dpayid-sdk.git"
   },
   "keywords": [
-    "steem",
-    "steemit",
+    "dpay",
+    "dsite",
     "blockchain",
-    "steemjs",
-    "steemconnect"
+    "dpayjs",
+    "dpayid"
   ],
-  "author": "Bonustrack <fabien@bonustrack.co> (https://github.com/bonustrack)",
+  "author": "dPay Labs <labs@dpays.io> (https://github.com/dpays)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/adcpm/sc2-sdk/issues"
+    "url": "https://github.com/dpays/dpayid-sdk/issues"
   },
-  "homepage": "https://github.com/adcpm/sc2-sdk#readme",
+  "homepage": "https://github.com/dpays/dpayid-sdk#readme",
   "dependencies": {
     "cross-fetch": "^1.1.1",
     "debug": "^2.2.0"
